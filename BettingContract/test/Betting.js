@@ -43,19 +43,17 @@ describe("Test Betting contract scenarios", function () {
         const playerOneSelTeam = playerOneInfo.teamSelected.toString()
         const playerTwoSelTeam = playerTwoInfo.teamSelected.toString()
 
+        const contractState=  await bettingInst.contractState();
+        expect(contractState).to.equal("AGREED");
         expect(playerOneSelTeam == 1);
         expect(playerTwoSelTeam == 2);
 
     })
 
     it("State transition should be fine", async function(){
-        // init
-        //start
-        //end
-        //terminate
-
+       
         const team1="India", team2="NZ";
-        let state="";
+        // let state="";
         const [owner, p1, p2] = await ethers.getSigners();
         const addr1 = await p1.address;
         const addr2 =  await p2.address;
@@ -66,9 +64,14 @@ describe("Test Betting contract scenarios", function () {
         state =  await bettingInst.contractState();
         expect(state).to.equal("DRAFT");
 
+        await bettingInst.connect(p1).placeBet(1,{ value: ethers.utils.parseEther("0.5") })
+        await bettingInst.connect(p2).placeBet(2,{ value: ethers.utils.parseEther("0.5") }) 
+        const isAgreedState=  await bettingInst.contractState();
+        expect(isAgreedState).to.equal("AGREED");
+        
         await bettingInst.connect(owner).startEventAndUpdateState()
-        state =  await bettingInst.contractState();
-        expect(state).to.equal("EFFECTIVE");
+        isEffectivetate =  await bettingInst.contractState();
+        expect(isEffectivetate).to.equal("EFFECTIVE");
 
         await bettingInst.connect(owner).endEventAndUpdateState(1)//(addr1)//(1) //player one should be winner in this case.
         const endstate =  await bettingInst.contractState();
@@ -222,7 +225,7 @@ describe("Test Betting contract scenarios", function () {
        const winner = await bettingInst.winningTeam();
        expect(winner.toString() ==  2);
     
-        //player one approves. Sca=enario when both player approves
+        //player one approves. Scenario when both player approves
         await bettingInst.connect(p1).approveWinner(true)
         await bettingInst.connect(p2).approveWinner(true) 
         const playerOneApproval =  await bettingInst.playerOneApproval()
