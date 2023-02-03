@@ -21,8 +21,7 @@ contract Betting is Initializable, OwnableUpgradeable, UUPSUpgradeable {
     }  
 
     mapping(address => Player) public playerInfo;
-    Player[] public playerArr;
-
+  
     struct Team {
         string country;
     }
@@ -48,6 +47,7 @@ contract Betting is Initializable, OwnableUpgradeable, UUPSUpgradeable {
     bool public playerTwoApproval;
 
     string public contractState;
+    uint betCounter;
 
     /// @custom:oz-upgrades-unsafe-allow constructor
     constructor() {
@@ -72,6 +72,7 @@ contract Betting is Initializable, OwnableUpgradeable, UUPSUpgradeable {
     function placeBet(uint256 teamid) external payable {
 
         //The first require is used to check if the player already exist
+     
         require(!checkPlayerExists(payable(msg.sender)),"Player can only bet once");
         require(keccak256(abi.encodePacked(contractState)) != keccak256(abi.encodePacked("TERMINATED")));
         require(keccak256(abi.encodePacked(matchObj.matchState)) != keccak256(abi.encodePacked("ENDED")));
@@ -87,9 +88,9 @@ contract Betting is Initializable, OwnableUpgradeable, UUPSUpgradeable {
             playerInfo[msg.sender].addr = msg.sender;
             playerInfo[msg.sender].id =  players.length + 1;
             playerInfo[msg.sender].betPlaced = msg.value;
-            //then we add the address of the player to the players array
+       
             players.push(payable(msg.sender));
-
+            betCounter = betCounter + 1;
         } else {
             require(minimumBet == msg.value, "Bet amount should be same");
 
@@ -99,9 +100,13 @@ contract Betting is Initializable, OwnableUpgradeable, UUPSUpgradeable {
             playerInfo[msg.sender].addr = msg.sender;
             playerInfo[msg.sender].id =  players.length + 1;
             playerInfo[msg.sender].betPlaced = msg.value;
-            //then we add the address of the player to the players array
+        
             players.push(payable(msg.sender));
+            betCounter = betCounter + 1;
+        }
 
+        if(betCounter == 2 ) {
+            contractState = "AGREED";
         }
 
     }
@@ -155,11 +160,10 @@ contract Betting is Initializable, OwnableUpgradeable, UUPSUpgradeable {
         //require(msg.sender == ownerAddr,"must be an owner");
         require(keccak256(abi.encodePacked(contractState)) != keccak256(abi.encodePacked("TERMINATED")));
         require(keccak256(abi.encodePacked(contractState)) == keccak256(abi.encodePacked("MATURED")) );
+        
         if(playerOneApproval && playerTwoApproval) {
-            //transfer the amount bet to the winner
-            //address payable[] public players;
-     
-            //check for the tie: Bith player bet for same team.
+
+            //check for the tie: Both player bet for same team.
             if(playerInfo[players[0]].teamSelected  == playerInfo[players[1]].teamSelected ) {
 
                   for(uint i=0;i<2;i++) {
@@ -193,21 +197,8 @@ contract Betting is Initializable, OwnableUpgradeable, UUPSUpgradeable {
 
     }
 
-    // function contBal() external view returns(uint256) {
-    //     return address(this).balance;
-    // }
-
-    // function p1BAl() external view returns(uint256) {
-    //     return address(0xAb8483F64d9C6d1EcF9b849Ae677dD3315835cb2).balance;
-    // }
-
-    // function p2BAl() external view returns(uint256) {
-    //     return address(0x4B20993Bc481177ec7E8f571ceCaE8A9e22C02db).balance;
-    // }
-
+ 
     function terminateContract() external onlyOwner {
-     //   require(msg.sender == ownerAddr,"must be an owner");
-        //pay back the amounts betted by the user
         require(keccak256(abi.encodePacked(contractState)) != keccak256(abi.encodePacked("TERMINATED")));
         contractState = "TERMINATED";
     }
