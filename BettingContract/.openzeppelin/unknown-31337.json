@@ -1,0 +1,375 @@
+{
+  "manifestVersion": "3.2",
+  "proxies": [
+    {
+      "address": "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9",
+      "txHash": "0xe07579fe780e0fd529a680359b19ae965404450b3ae2c7d31a75c79755b37bb7",
+      "kind": "uups"
+    },
+    {
+      "address": "0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6",
+      "txHash": "0x97291db8fb8e1c8947463e60796d76329ede0b7669d8b36ae83bf0a4b66c7b35",
+      "kind": "uups"
+    },
+    {
+      "address": "0xA51c1fc2f0D1a1b8494Ed1FE312d7C3a78Ed91C0",
+      "txHash": "0x451876dc3087ba8af3b5f8a4327ef488aff0f83bce2d65c32ac3cf9abf4dc811",
+      "kind": "uups"
+    },
+    {
+      "address": "0x0DCd1Bf9A1b36cE34237eEaFef220932846BCD82",
+      "txHash": "0xef06fa6302048b70428d26374666b63fd25dc5b9cd2a8f648b428c3d5ce04378",
+      "kind": "uups"
+    },
+    {
+      "address": "0x610178dA211FEF7D417bC0e6FeD39F05609AD788",
+      "txHash": "0x1a3ffa28a6df822a867cfb0d4cb463a672340c48cbcdfb5133de15d308fa3c2c",
+      "kind": "uups"
+    },
+    {
+      "address": "0x9A676e781A523b5d0C0e43731313A708CB607508",
+      "txHash": "0x6c96a1d60afe8cb28fb36ee83ae4e2f85ea04ca4ba8d2661b59a4152aaa10d94",
+      "kind": "uups"
+    },
+    {
+      "address": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+      "txHash": "0xdc8015050298ffa0644c829b2d2398d09ee521a721db126ef667c56439b463cb",
+      "kind": "uups"
+    },
+    {
+      "address": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
+      "txHash": "0xc655082a5cca5fd6d51ad40d362b86c4d348a9ff94edf105303f006d0d94576a",
+      "kind": "uups"
+    },
+    {
+      "address": "0xa513E6E4b8f2a923D98304ec87F64353C4D5C853",
+      "txHash": "0xf99e982969589ea7f84071d2c98aaab2e74e95eb39144debd7ca350491a12ce9",
+      "kind": "uups"
+    },
+    {
+      "address": "0xB7f8BC63BbcaD18155201308C8f3540b07f84F5e",
+      "txHash": "0x437e4f0edc3bbc9de7f94de2a2eedf93978ba196c357a2f28fe4b2acde240c24",
+      "kind": "uups"
+    },
+    {
+      "address": "0x0B306BF915C4d645ff596e518fAf3F9669b97016",
+      "txHash": "0x05b45374ef316777588abc16e8592408193131c1dde1d5bf71f225412113dc21",
+      "kind": "uups"
+    },
+    {
+      "address": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+      "txHash": "0x3ac071a2ac2ad3c4a0c19f21d007eac194f2c7fc9bf50041e2c9edcd73703f65",
+      "kind": "uups"
+    }
+  ],
+  "impls": {
+    "cf94faa480d30c7f8c179f631c03562dd996b80a5b66cd863cbe77ca73d9aec8": {
+      "address": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+      "txHash": "0xc270b3c448dd6c92daa1b2c90b03aabbf7d73472072637b32d1712f45c8e91b7",
+      "layout": {
+        "solcVersion": "0.8.17",
+        "storage": [
+          {
+            "label": "_initialized",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_uint8",
+            "contract": "Initializable",
+            "src": "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:62",
+            "retypedFrom": "bool"
+          },
+          {
+            "label": "_initializing",
+            "offset": 1,
+            "slot": "0",
+            "type": "t_bool",
+            "contract": "Initializable",
+            "src": "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:67"
+          },
+          {
+            "label": "__gap",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_array(t_uint256)50_storage",
+            "contract": "ContextUpgradeable",
+            "src": "@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol:36"
+          },
+          {
+            "label": "_owner",
+            "offset": 0,
+            "slot": "51",
+            "type": "t_address",
+            "contract": "OwnableUpgradeable",
+            "src": "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:22"
+          },
+          {
+            "label": "__gap",
+            "offset": 0,
+            "slot": "52",
+            "type": "t_array(t_uint256)49_storage",
+            "contract": "OwnableUpgradeable",
+            "src": "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:94"
+          },
+          {
+            "label": "__gap",
+            "offset": 0,
+            "slot": "101",
+            "type": "t_array(t_uint256)50_storage",
+            "contract": "ERC1967UpgradeUpgradeable",
+            "src": "@openzeppelin/contracts-upgradeable/proxy/ERC1967/ERC1967UpgradeUpgradeable.sol:211"
+          },
+          {
+            "label": "__gap",
+            "offset": 0,
+            "slot": "151",
+            "type": "t_array(t_uint256)50_storage",
+            "contract": "UUPSUpgradeable",
+            "src": "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol:107"
+          },
+          {
+            "label": "ownerAddr",
+            "offset": 0,
+            "slot": "201",
+            "type": "t_address_payable",
+            "contract": "Betting",
+            "src": "contracts/Betting.sol:11"
+          },
+          {
+            "label": "minimumBet",
+            "offset": 0,
+            "slot": "202",
+            "type": "t_uint256",
+            "contract": "Betting",
+            "src": "contracts/Betting.sol:12"
+          },
+          {
+            "label": "players",
+            "offset": 0,
+            "slot": "203",
+            "type": "t_array(t_address_payable)dyn_storage",
+            "contract": "Betting",
+            "src": "contracts/Betting.sol:13"
+          },
+          {
+            "label": "playerInfo",
+            "offset": 0,
+            "slot": "204",
+            "type": "t_mapping(t_address,t_struct(Player)1240_storage)",
+            "contract": "Betting",
+            "src": "contracts/Betting.sol:23"
+          },
+          {
+            "label": "playerArr",
+            "offset": 0,
+            "slot": "205",
+            "type": "t_array(t_struct(Player)1240_storage)dyn_storage",
+            "contract": "Betting",
+            "src": "contracts/Betting.sol:24"
+          },
+          {
+            "label": "teamOneObj",
+            "offset": 0,
+            "slot": "206",
+            "type": "t_struct(Team)1252_storage",
+            "contract": "Betting",
+            "src": "contracts/Betting.sol:29"
+          },
+          {
+            "label": "teamTwoObj",
+            "offset": 0,
+            "slot": "207",
+            "type": "t_struct(Team)1252_storage",
+            "contract": "Betting",
+            "src": "contracts/Betting.sol:30"
+          },
+          {
+            "label": "teamMap",
+            "offset": 0,
+            "slot": "208",
+            "type": "t_mapping(t_uint256,t_struct(Team)1252_storage)",
+            "contract": "Betting",
+            "src": "contracts/Betting.sol:32"
+          },
+          {
+            "label": "matchObj",
+            "offset": 0,
+            "slot": "209",
+            "type": "t_struct(Match)1270_storage",
+            "contract": "Betting",
+            "src": "contracts/Betting.sol:39"
+          },
+          {
+            "label": "startTime",
+            "offset": 0,
+            "slot": "212",
+            "type": "t_uint256",
+            "contract": "Betting",
+            "src": "contracts/Betting.sol:41"
+          },
+          {
+            "label": "endTime",
+            "offset": 0,
+            "slot": "213",
+            "type": "t_uint256",
+            "contract": "Betting",
+            "src": "contracts/Betting.sol:42"
+          },
+          {
+            "label": "winningTeam",
+            "offset": 0,
+            "slot": "214",
+            "type": "t_uint256",
+            "contract": "Betting",
+            "src": "contracts/Betting.sol:44"
+          },
+          {
+            "label": "playerOneApproval",
+            "offset": 0,
+            "slot": "215",
+            "type": "t_bool",
+            "contract": "Betting",
+            "src": "contracts/Betting.sol:47"
+          },
+          {
+            "label": "playerTwoApproval",
+            "offset": 1,
+            "slot": "215",
+            "type": "t_bool",
+            "contract": "Betting",
+            "src": "contracts/Betting.sol:48"
+          },
+          {
+            "label": "contractState",
+            "offset": 0,
+            "slot": "216",
+            "type": "t_string_storage",
+            "contract": "Betting",
+            "src": "contracts/Betting.sol:50"
+          }
+        ],
+        "types": {
+          "t_address": {
+            "label": "address",
+            "numberOfBytes": "20"
+          },
+          "t_address_payable": {
+            "label": "address payable",
+            "numberOfBytes": "20"
+          },
+          "t_array(t_address_payable)dyn_storage": {
+            "label": "address payable[]",
+            "numberOfBytes": "32"
+          },
+          "t_array(t_struct(Player)1240_storage)dyn_storage": {
+            "label": "struct Betting.Player[]",
+            "numberOfBytes": "32"
+          },
+          "t_array(t_uint256)49_storage": {
+            "label": "uint256[49]",
+            "numberOfBytes": "1568"
+          },
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]",
+            "numberOfBytes": "1600"
+          },
+          "t_bool": {
+            "label": "bool",
+            "numberOfBytes": "1"
+          },
+          "t_mapping(t_address,t_struct(Player)1240_storage)": {
+            "label": "mapping(address => struct Betting.Player)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_uint256,t_struct(Team)1252_storage)": {
+            "label": "mapping(uint256 => struct Betting.Team)",
+            "numberOfBytes": "32"
+          },
+          "t_string_storage": {
+            "label": "string",
+            "numberOfBytes": "32"
+          },
+          "t_struct(Match)1270_storage": {
+            "label": "struct Betting.Match",
+            "members": [
+              {
+                "label": "teamOneId",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "teamTwoId",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "1"
+              },
+              {
+                "label": "matchState",
+                "type": "t_string_storage",
+                "offset": 0,
+                "slot": "2"
+              }
+            ],
+            "numberOfBytes": "96"
+          },
+          "t_struct(Player)1240_storage": {
+            "label": "struct Betting.Player",
+            "members": [
+              {
+                "label": "amountBet",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "teamSelected",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "1"
+              },
+              {
+                "label": "betPlaced",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "2"
+              },
+              {
+                "label": "addr",
+                "type": "t_address",
+                "offset": 0,
+                "slot": "3"
+              },
+              {
+                "label": "id",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "4"
+              }
+            ],
+            "numberOfBytes": "160"
+          },
+          "t_struct(Team)1252_storage": {
+            "label": "struct Betting.Team",
+            "members": [
+              {
+                "label": "country",
+                "type": "t_string_storage",
+                "offset": 0,
+                "slot": "0"
+              }
+            ],
+            "numberOfBytes": "32"
+          },
+          "t_uint256": {
+            "label": "uint256",
+            "numberOfBytes": "32"
+          },
+          "t_uint8": {
+            "label": "uint8",
+            "numberOfBytes": "1"
+          }
+        }
+      }
+    }
+  }
+}
