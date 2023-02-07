@@ -8,44 +8,38 @@ import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 contract Betting is Initializable, OwnableUpgradeable, UUPSUpgradeable {
 
 
-     address payable public ownerAddr;
-     uint256 public minimumBet;
-     address payable[] public players;
+    address payable public ownerAddr;
+    uint256 public minimumBet;
+    address payable[] public players;
+    address payable[] public testarr;
 
     struct Player {
       uint256 amountBet;
       uint teamSelected;
-      uint256  betPlaced;
       address addr;
       uint id;
+      bool  playerApproval;
     }  
-
     mapping(address => Player) public playerInfo;
   
+
     struct Team {
         string country;
     }
     Team public teamOneObj;
     Team public teamTwoObj;
-
     mapping(uint=>Team) public teamMap;
 
     struct Match {
         uint256 teamOneId;
         uint256 teamTwoId;
         string matchState; 
+        uint256  startTime;
+        uint256  endTime;
+        uint256  winningTeam;
     }
     Match public matchObj;
-
-    uint256 public startTime;
-    uint256 public endTime;
- 
-    uint256 public winningTeam;
   
-    //play id to bool
-    bool public playerOneApproval;
-    bool public playerTwoApproval;
-
     string public contractState;
     uint betCounter;
 
@@ -65,63 +59,53 @@ contract Betting is Initializable, OwnableUpgradeable, UUPSUpgradeable {
             teamMap[1] = teamOneObj;
             teamTwoObj =  Team(team2);      
             teamMap[2] = teamTwoObj;
-            matchObj = Match(1,2,"SCHEDULED");
-     
+            matchObj = Match(1,2,"SCHEDULED",0,0,0);
     }
+
+    function testlen() external view returns (uint256) {
+        return testarr.length;
+    }
+
 
     function placeBet(uint256 teamid) external payable {
 
-        //The first require is used to check if the player already exist
-     
-        require(!checkPlayerExists(payable(msg.sender)),"Player can only bet once");
+        require(teamid == 1 || teamid == 2, "Team id must be either 1 or 2");
+        require(players.length < 2,"Only 2 players can place the bet");
+        require(msg.value > 0,"Bet amount must be greater then zero");
+        require(playerInfo[msg.sender].addr == 0x0000000000000000000000000000000000000000, "Bet can only be placed once by a player");
         require(keccak256(abi.encodePacked(contractState)) != keccak256(abi.encodePacked("TERMINATED")));
         require(keccak256(abi.encodePacked(matchObj.matchState)) != keccak256(abi.encodePacked("ENDED")));
         require(keccak256(abi.encodePacked(contractState)) != keccak256(abi.encodePacked("MATURED"))); 
-        
-        
-        if(minimumBet == 0) {
-            minimumBet = msg.value;// amt;
-
-            //We set the player informations : amount of the bet and selected team
-            playerInfo[msg.sender].amountBet = msg.value;//amt;
-            playerInfo[msg.sender].teamSelected = teamid;
-            playerInfo[msg.sender].addr = msg.sender;
-            playerInfo[msg.sender].id =  players.length + 1;
-            playerInfo[msg.sender].betPlaced = msg.value;
-       
-            players.push(payable(msg.sender));
-            betCounter = betCounter + 1;
-        } else {
+    
+        if(players.length > 0) {
+            //
+            require( playerInfo[players[players.length-1]].teamSelected !=  teamid, "Both the players cannot bet for the same team");
             require(minimumBet == msg.value, "Bet amount should be same");
-
-            //We set the player informations : amount of the bet and selected team
-            playerInfo[msg.sender].amountBet = msg.value;//amt;
+            playerInfo[msg.sender].amountBet = msg.value;
             playerInfo[msg.sender].teamSelected = teamid;
             playerInfo[msg.sender].addr = msg.sender;
             playerInfo[msg.sender].id =  players.length + 1;
-            playerInfo[msg.sender].betPlaced = msg.value;
-        
-            players.push(payable(msg.sender));
-            betCounter = betCounter + 1;
-        }
-
-        if(betCounter == 2 ) {
+            playerInfo[msg.sender].amountBet = msg.value;
+            players.push(payable(msg.sender));   
             contractState = "AGREED";
+        } else {
+            minimumBet = msg.value;
+            playerInfo[msg.sender].amountBet = msg.value;
+            playerInfo[msg.sender].teamSelected = teamid;
+            playerInfo[msg.sender].addr = msg.sender;
+            playerInfo[msg.sender].id =  players.length + 1;
+            playerInfo[msg.sender].amountBet = msg.value;
+            players.push(payable(msg.sender));
         }
-
+ 
     }
 
-    function checkPlayerExists(address payable player) public view returns(bool){
-      for(uint256 i = 0; i < players.length; i++){
-         if(players[i] == player) return true;
-      }
-      return false;
-    }
+   
 
     function startEventAndUpdateState() external onlyOwner{
             require(keccak256(abi.encodePacked(contractState)) != keccak256(abi.encodePacked("TERMINATED")));
             contractState= "EFFECTIVE";
-            startTime = block.timestamp;
+            matchObj.startTime= block.timestamp;
     }
 
     /*
@@ -130,22 +114,23 @@ contract Betting is Initializable, OwnableUpgradeable, UUPSUpgradeable {
     function endEventAndUpdateState(uint _winningTeam) external onlyOwner{
             require(keccak256(abi.encodePacked(contractState)) != keccak256(abi.encodePacked("TERMINATED")));
             contractState= "MATURED";
-            endTime = block.timestamp;
-           // winner 
-            winningTeam= _winningTeam;
+            matchObj.endTime = block.timestamp;
+            matchObj.winningTeam= _winningTeam;
+            matchObj.matchState = "ENDED";
     } 
 
     /*
     This method is used to accept/reject the decision made for the winning team selection.
     */
     function approveWinner(bool isApproved) external {
+            
             require(keccak256(abi.encodePacked(contractState)) != keccak256(abi.encodePacked("TERMINATED")));
             require(keccak256(abi.encodePacked(contractState)) == keccak256(abi.encodePacked("MATURED")) );
     
             if(playerInfo[msg.sender].id == 1) {
-                playerOneApproval = isApproved;
+                playerInfo[players[0]].playerApproval = isApproved;
             } else if(playerInfo[msg.sender].id ==2) {
-                playerTwoApproval = isApproved;
+                playerInfo[players[1]].playerApproval = isApproved;
             }
     }
 
@@ -157,56 +142,92 @@ contract Betting is Initializable, OwnableUpgradeable, UUPSUpgradeable {
     */
     function checkApproval() external  onlyOwner{
        
-        //require(msg.sender == ownerAddr,"must be an owner");
         require(keccak256(abi.encodePacked(contractState)) != keccak256(abi.encodePacked("TERMINATED")));
         require(keccak256(abi.encodePacked(contractState)) == keccak256(abi.encodePacked("MATURED")) );
         
-        if(playerOneApproval && playerTwoApproval) {
-
-            //check for the tie: Both player bet for same team.
-            if(playerInfo[players[0]].teamSelected  == playerInfo[players[1]].teamSelected ) {
-
-                  for(uint i=0;i<2;i++) {
-                    address  paddr = players[i];
-                    Player memory _player = playerInfo[paddr];
-                    uint256  _betPlaced  = _player.betPlaced;
-                    address payable paddrpayable = payable(paddr);
-                    paddrpayable.transfer(_betPlaced);
-                 }// for
-
-            } else {
-                for(uint i=0;i<2;i++) {
-                    if(playerInfo[players[i]].teamSelected ==  winningTeam) { //winner) {
+     
+        if(playerInfo[players[0]].playerApproval && playerInfo[players[1]].playerApproval) {
+            for(uint i=0;i<2;i++) {
+                    if(playerInfo[players[i]].teamSelected ==  matchObj.winningTeam) { //winner) {
                         players[i].transfer(address(this).balance);
                     }
-                }
             }
             contractState= "SETTLED";
         } else {
              for(uint i=0;i<2;i++) {
                   address  paddr = players[i];
                   Player memory _player = playerInfo[paddr];
-                  uint256  _betPlaced  = _player.betPlaced;
+                  uint256  _betPlaced  = _player.amountBet;
                   address payable paddrpayable = payable(paddr);
                   paddrpayable.transfer(_betPlaced);
              }// for
             contractState= "TERMINATED";
         } // else
-
-        matchObj.matchState = "ENDED";
+     
 
     }
 
- 
     function terminateContract() external onlyOwner {
         require(keccak256(abi.encodePacked(contractState)) != keccak256(abi.encodePacked("TERMINATED")));
         contractState = "TERMINATED";
     }
 
+    function checkPlayerExists(address _playerAddr) public view returns(bool) {
+
+        if(playerInfo[_playerAddr].addr != 0x0000000000000000000000000000000000000000) {
+            return true;
+        }
+        return false;
+        
+    }
+    
 
     function _authorizeUpgrade(address newImplementation)
         internal
         onlyOwner
         override
     {}
+    
 }
+
+
+/*. 
+
+For testing :
+
+    A) Both the player bet for different teams, and both agree on outcome(winner[winning team] selection).- Going to test this
+    
+    1) deploying contract and state must be "DRAFT",and let players place their bet[function : placeBet].
+        Once both the players have placed their bet. state must be "AGREED".
+
+    2) starting the event[function : startEventAndUpdateState], and check the contract state[ state var. :contractState].
+        state[state var: contractState] must be "EFFECTIVE"
+
+    3)  Ending the event[function : endEventAndUpdateState]  ,and deciding the winner.State should become "MATURED".
+
+    4) Player 1 and 2 approve(agree)[function : approveWinner] on the outcome.
+
+    5) Now, admin check the approval[function : checkApproval] . the player whose team selection while placing the bet matches the outcome, 
+            will be the winner,and the state must be changed to "SETTLED"
+
+    6) Terminate the contract so that it cannot be used again and state must be "TERMINATED" now.
+
+    ----
+
+    B) Both the player bet for different teams, but they does not agree on the outcome(winner[winning team] selection)..
+
+    1) deploying contract,and let players place their bet[function : placeBet].
+
+    2) starting the event[function : startEventAndUpdateState], and check the contract state[ state var. :contractState].
+        state[state var: contractState] must be "EFFECTIVE"
+
+    3) Ending the event[function : endEventAndUpdateState]  ,and deciding the winner.State should become "MATURED".
+
+    4) Player 1 and 2 disapprove the outcome[function : approveWinner]
+
+    5) Now, admin check the approval[function : checkApproval].  In this case as players have not agreed on the winner[winning team] selection,
+        both the players will get the amount they had put while placing the bet, and contract must be "TERMINATED".
+    
+
+*/
+
